@@ -414,7 +414,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 📀 RunTime: {imdb['runtime']} Minutes
 📆 Release Info : {imdb['release_date']} 
 """,show_alert=True)
-        )
+    
     elif query.data == "pages":
         await query.answer()
     elif query.data == "start":
