@@ -399,6 +399,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
             file_id=file_id,
             caption=f_caption,
             protect_content=True if ident == 'checksubp' else False
+
+    elif query.data == "tip2": 
+        await query.answer(f" • ബ്രോ ഇതിലല്ല 😃 \n\n • താഴെ വരുന്ന മൂവി ലിസ്റ്റിലാണ് ഞെക്കേണ്ടത്😁",show_alert=True)
+    elif query.data == "sub": 
+        await query.answer(f" • ബ്രോ ഇതിലല്ല 😃 \n\n • ഗ്രൂപ്പിൽ വരുന്ന മൂവി ലിസ്റ്റിലാണ് ഞെക്കേണ്ടത്😁",show_alert=True)
+    elif query.data == "imd_alert":
+        imdb = await get_poster(query.message.reply_to_message.text)
+        await query.answer(f"""🏷 Title: {imdb['title']} 
+🎭 Genres: {imdb['genres']} 
+📆 Year: {imdb['year']} 
+🌟 Rating: {imdb['rating']} 
+☀️ Languages : {imdb['languages']} 
+📀 RunTime: {imdb['runtime']} Minutes
+📆 Release Info : {imdb['release_date']} 
+""",show_alert=True)
         )
     elif query.data == "pages":
         await query.answer()
@@ -666,8 +681,27 @@ async def auto_filter(client, msg, spoll=False):
         BUTTONS[key] = search
         req = message.from_user.id if message.from_user else 0
         btn.append(
-            [InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
-             InlineKeyboardButton(text="NEXT ⏩", callback_data=f"next_{req}_{key}_{offset}")]
+            [InlineKeyboardButton(text=f"🗓 1/{round(int(total_results) / 10)}", callback_data="pages"),
+             InlineKeyboardButton('🗑', callback_data='close_data'),
+             InlineKeyboardButton(text="NEXT ⏩", callback_data=f"next_{req}_{key}_{offset}")]   
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text="⭕️ 𝗝𝗢𝗜𝗡 𝗠𝗬 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 ⭕️",url="https://t.me/moviesupdateck2")]
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text=f"🔮 {msg.text} ",callback_data="imd_alert"),
+             InlineKeyboardButton(text=f"🗂 {total_results} ",callback_data="tip2")]
+        )
+    else:
+        btn.append(
+            [InlineKeyboardButton(text="🗓 1/1", callback_data="pages")]
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text="⭕️ 𝗝𝗢𝗜𝗡 𝗠𝗬 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 ⭕️",url="https://t.me/moviesupdateck2")]
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text=f"🔮 {msg.text} ",callback_data="imd_alert"),
+             InlineKeyboardButton(text=f"🗂 {total_results} ",callback_data="tip2")]
         )
     else:
         btn.append(
